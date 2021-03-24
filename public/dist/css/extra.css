@@ -1,0 +1,21 @@
+.dot1 {
+    height: 15px;
+    width: 15px;
+    background-color: rgb(255, 0, 0);
+    border-radius: 50%;
+    display: inline-block;
+  }
+.dot2 {
+    height: 15px;
+    width: 15px;
+    background-color: rgb(255, 251, 0);
+    border-radius: 50%;
+    display: inline-block;
+  }
+.dot3 {
+    height: 15px;
+    width: 15px;
+    background-color: rgb(21, 255, 0);
+    border-radius: 50%;
+    display: inline-block;
+  }
