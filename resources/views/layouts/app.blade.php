@@ -1,11 +1,12 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ $title ?? config('app.name') }}</title>
-@include('layouts.css')
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ $title ?? config('app.name') }}</title>
+        @include('layouts.css')
+        @include('layouts.js')
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -51,6 +52,5 @@
 </div>
 <!-- ./wrapper -->
 
-@include('layouts.js')
 </body>
 </html>

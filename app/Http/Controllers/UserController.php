@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::all()->sortBy('username');
         //ddd($users);
         return view('admin', compact('users'), ['menu' => 'menu-open', 'itemAdmin' => 'active']);
     }
@@ -37,7 +37,7 @@ class UserController extends Controller
                 return redirect('/admin');
         }
     }
-    public function update(User $user)
+    public function update()
     {
         $request = request()->all();
         $UpdateUser = User::find($request['id']);
@@ -51,10 +51,13 @@ class UserController extends Controller
         session()->flash("success", "User ".$UpdateUser['name']." Was Updated");
         return redirect('/admin');
     }
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
-        $user->delete();
-        session()->flash("deleted", "User ".$user['name']." Was Deleted");
+        $request = request()->all();
+        $deleteUser = User::find($request['id']);
+        // dd($deleteUser);
+        $deleteUser->delete();
+        session()->flash("deleted", "User ".$deleteUser['name']." Was Deleted");
         return redirect('/admin');
     }
 }

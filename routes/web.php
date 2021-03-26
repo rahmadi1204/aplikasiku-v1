@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin', [UserController::class, 'index'])->name('admin');
     Route::post('/admin', [UserController::class, 'store'])->name('create.user');
     Route::post('/admin/update', [UserController::class, 'update'])->name('update.user');
-    Route::post('/admin/{user:id}/delete', [UserController::class, 'destroy'])->name('delete.user');
+    Route::post('/admin/delete', [UserController::class, 'destroy'])->name('delete.user');
     Route::get('/category', [CategoryController::class, 'index'])->name('category');
     Route::post('/category', [CategoryController::class, 'store'])->name('create.category');
     Route::get('/product', [ProductController::class, 'index'])->name('product');

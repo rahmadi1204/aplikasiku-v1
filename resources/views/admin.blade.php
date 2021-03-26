@@ -39,7 +39,7 @@
                           <div class="row ml-1">
                             <div class="btn btn-outline-success btn-sm mr-1" id="edit-item" data-id="{{ $user->id }}"><i class="fa fa-edit"></i></div>
                         </form>
-                        <div endpoint="{{ route('delete.user', $user) }}" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete{{ $user['id'] }}"><i class="fa fa-trash"></i></div>
+                        <div class="btn btn-outline-danger btn-sm mr-1" id="delete-item" data-delete-id="{{ $user->id }}" data-delete-name="{{ $user->name }}"><i class="fa fa-trash"></i></div>
                           </div>
                       </td>
                     </tr>
@@ -156,7 +156,7 @@
               <div class="form-group row">
                 <label for="inputusername" class="col-sm-2 col-form-label">Username</label>
                 <div class="col-sm-10">
-                  <input id="modal-input-id" name="id" type="text" class="form-control" id="inputid" placeholder="id">
+                  <input id="modal-input-id" name="id" type="hidden" class="form-control" placeholder="id">
                   <input id="modal-input-username" name="username" type="text" class="form-control" id="inputusername" placeholder="username">
                 </div>
               </div>
@@ -219,8 +219,8 @@
   </div>
 
 {{--  delete  --}}
-@foreach ($users as $user)
-<div class="modal fade" id="delete{{ $user['id'] }}" tabindex="-1" role="dialog" aria-labelledby="deleteUser" aria-hidden="true">
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -231,10 +231,11 @@
             </div>
         </div>
         <div class="modal-body">
-            <h5 class="modal-title" id="deleteUser">Hapus Data {{ $user['name'] }} ?</h5>
+            <form action="{{ route('delete.user')}}" method="post">
+                @csrf
+            <h5 class="modal-title" id="deleteUser">Yakin Hapus Data <input type="text" class="border-0 text-danger" id="modal-delete-name"></h5>
+            <input id="modal-delete-id" name="id" type="hidden" class="form-control">
         </div>
-        <form action="{{ route('delete.user', $user['id']) }}" method="post">
-            @csrf
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-dismiss="modal">No</button>
                 <button type="submit" class="btn btn-danger">Yes</button>
@@ -243,6 +244,84 @@
       </div>
     </div>
   </div>
-@endforeach
+{{--  User Edit  --}}
+<script>
+    $(document).ready(function() {
+        /**
+         * for showing edit item popup
+         */
 
+        $(document).on('click', "#edit-item", function() {
+          $(this).addClass('edit-item-trigger-clicked'); //useful for identifying which trigger was clicked and consequently grab data from the correct row and not the wrong one.
+
+          var options = {
+            'backdrop': 'static'
+          };
+          $('#edit-modal').modal(options)
+        })
+
+        // on modal show
+        $('#edit-modal').on('show.bs.modal', function() {
+          var el = $(".edit-item-trigger-clicked"); // See how its usefull right here?
+          var row = el.closest(".data-row");
+
+          // get the data
+          var id = el.data('id');
+          var name = row.children(".name").text();
+          var username = row.children(".username").text();
+          var email = row.children(".email").text();
+
+          // fill the data in the input fields
+          $("#modal-input-id").val(id);
+          $("#modal-input-name").val(name);
+          $("#modal-input-username").val(username);
+          $("#modal-input-email").val(email);
+
+        })
+
+        // on modal hide
+        $('#edit-modal').on('hide.bs.modal', function() {
+          $('.edit-item-trigger-clicked').removeClass('edit-item-trigger-clicked')
+          $("#edit-form").trigger("reset");
+        })
+      })
+</script>
+{{--  Delete User  --}}
+<script>
+    $(document).ready(function() {
+        /**
+         * for showing edit item popup
+         */
+
+        $(document).on('click', "#delete-item", function() {
+          $(this).addClass('delete-item-trigger-clicked'); //useful for identifying which trigger was clicked and consequently grab data from the correct row and not the wrong one.
+
+          var options = {
+            'backdrop': 'static'
+          };
+          $('#delete-modal').modal(options)
+        })
+
+        // on modal show
+        $('#delete-modal').on('show.bs.modal', function() {
+          var el = $(".delete-item-trigger-clicked"); // See how its usefull right here?
+          var row = el.closest(".data-row");
+
+          // get the data
+          var id = el.data('delete-id');
+          var name = el.data('delete-name');
+
+          // fill the data in the input fields
+          $("#modal-delete-id").val(id);
+          $("#modal-delete-name").val(name);
+
+        })
+
+        // on modal hide
+        $('#delete-modal').on('hide.bs.modal', function() {
+          $('.delete-item-trigger-clicked').removeClass('delete-item-trigger-clicked')
+          $("#delete-form").trigger("reset");
+        })
+      })
+</script>
 @endsection
